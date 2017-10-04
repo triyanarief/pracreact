@@ -5,8 +5,9 @@ import Child from './Child';
 class Mine extends React.Component {
   constructor(){
     super()
-    this.state = {texts:[], color : ''}
+    this.state = {texts:[], color : '', counter : 0}
     this.changeColor = this.changeColor.bind(this)
+    this.counterClick = this.counterClick.bind(this)
   }
 
   componentDidMount() {
@@ -21,10 +22,14 @@ class Mine extends React.Component {
     }
   }
 
+  counterClick() {
+    this.setState({counter : this.state.counter + 1 })
+  }
+
   render() {
-    let texts = this.state.texts.map(function(text){
+    let texts = this.state.texts.map((text) => {
       return(
-        <Child text = {text} />
+        <Child text = {text} counterClick = {this.counterClick}/>
       )
     })
 
@@ -37,6 +42,7 @@ class Mine extends React.Component {
       // 5. state digunakan di parrent agar bisa kita isi nilai dan kita rubah dengan menggunkan construct
       // 6. componentDidMount ini berfungsi sebagai tempat untuk kita mengisi nilai suatu state pada component. hanya boleh di inisialisasi disini gak bisa ditempat lain supaya tidak error.
       // 7. untuk menangani event. fungsi event kita buat tepat di atas render atau sebelum render lalu pada constructor kita set dulu this.nama fungsi untuk di bind (this) agar ketika digunakan bisa berfungsi this-nya tidak null. dan buat onClick di div yang mau kita pakaikan fungsinya. isinya nama fungsi tersebut cukup simple
+      // 8. parent child relasi yang lebih kompleks untuk melempar props. contohnya kita mau buat counter hanya pada child saja maka bisa kita buat function counterClick yang akan dijadika props didalam tag child. dan this jika tidak terbaca di map maka kita perlu melakukan parameter kedua di map dengan this. atau dengan arrow function tanpa param kedua langsung bisa dikenali.
       <div style={style} onClick={this.changeColor}>
         <div id="mine">
           Halo Dunia Malam
@@ -46,6 +52,7 @@ class Mine extends React.Component {
         </div>
         <br />
         {texts}
+        {this.state.counter}
       </div>
     );
   }
